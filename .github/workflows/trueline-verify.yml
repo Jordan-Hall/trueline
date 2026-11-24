@@ -1,0 +1,43 @@
+name: trueline verify
+
+# Fails a pull request that edits .trueline.allow, weakens trueline.json
+# (or alters its "github" governance section), or edits protected workflow files.
+# Only the trueline merge workflow tightens .trueline.allow on main.
+#
+# pull_request_target executes the base branch's copy of this workflow and
+# codebase without checking out or executing any untrusted code from the PR.
+
+on: pull_request_target
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: trueline-verify-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build trusted base-branch trueline
+        run: |
+          bun install --frozen-lockfile --ignore-scripts
+          bun run build
+      - name: Verify pull request governance
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          node dist/cli/bin.js github verify \
+            --protect .github/workflows/trueline-verify.yml,.github/workflows/trueline-merge.yml,.github/workflows/ci.yml,.github/workflows/release.yml,.github/CODEOWNERS

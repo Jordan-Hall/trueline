@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "trueline configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "heldInMind": { "type": "integer", "minimum": 1, "default": 7 },
+    "breakEven": { "type": "integer", "minimum": 0, "default": 1 },
+    "maxDirectoryMembers": { "type": "integer", "minimum": 1, "default": 15 },
+    "maxFileLines": { "type": "integer", "minimum": 1, "default": 1500 },
+    "maxFunctionLines": { "type": "integer", "minimum": 1, "default": 120 },
+    "maxNestingDepth": { "type": "integer", "minimum": 1, "default": 4 },
+    "maxParameters": { "type": "integer", "minimum": 1, "default": 5 },
+    "minCloneTokens": { "type": "integer", "minimum": 10, "default": 45 },
+    "ignoreTypeOnlyImports": { "type": "boolean", "default": false },
+    "ignore": { "type": "array", "items": { "type": "string" } },
+    "extensions": { "type": "array", "items": { "type": "string" } },
+    "preprocessors": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["replace"],
+        "additionalProperties": false,
+        "properties": {
+          "replace": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": { "type": "string" }
+            }
+          },
+          "scriptKind": { "type": "string", "enum": ["ts", "tsx", "js", "jsx"] }
+        }
+      }
+    },
+    "lints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "module-cycle": { "type": "boolean" },
+        "package-cycle": { "type": "boolean" },
+        "tangle": { "type": "boolean" },
+        "field-leak": { "type": "boolean" },
+        "shallow-module": { "type": "boolean" },
+        "wide-directory": { "type": "boolean" },
+        "long-file": { "type": "boolean" },
+        "layer-violation": { "type": "boolean" },
+        "undeclared-dep": { "type": "boolean" },
+        "unused-export": { "type": "boolean" },
+        "wildcard-barrel": { "type": "boolean" },
+        "verbose-comment": { "type": "boolean" },
+        "dead-code": { "type": "boolean" },
+        "silent-catch": { "type": "boolean" },
+        "type-escape": { "type": "boolean" },
+        "pass-through": { "type": "boolean" },
+        "complex-function": { "type": "boolean" },
+        "duplicate-logic": { "type": "boolean" }
+      }
+    },
+    "layers": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "preset": { "type": "string", "enum": ["clean-architecture", "none"], "default": "clean-architecture" },
+        "noPackageToApp": { "type": "boolean", "default": true },
+        "featureSlices": { "type": "array", "items": { "type": "string" } },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "from"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string" },
+              "from": {
+                "oneOf": [
+                  { "type": "string" },
+                  { "type": "array", "items": { "type": "string" } }
+                ]
+              },
+              "deny": { "type": "array", "items": { "type": "string" } },
+              "allow": { "type": "array", "items": { "type": "string" } },
+              "reason": { "type": "string" },
+              "ignoreTypeOnly": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "github": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ratchet": {
+          "type": "string",
+          "enum": ["merge", "manual"],
+          "default": "manual"
+        },
+        "branch": { "type": "string", "default": "main" },
+        "bot": { "type": "string" },
+        "protect": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

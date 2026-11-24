@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bun install --frozen-lockfile
+      - name: Typecheck
+        run: bun run check-types
+      - name: Build Node + ESM distribution
+        run: bun run build
+      - name: Run test suite
+        run: bun test
+      - name: Dogfood trueline (Bun)
+        run: bun src/cli/bin.ts --format markdown >> "$GITHUB_STEP_SUMMARY"
+      - name: Dogfood trueline (Node 22)
+        run: node dist/cli/bin.js --stats

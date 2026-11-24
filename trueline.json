@@ -1,0 +1,68 @@
+{
+  "$schema": "./schema/trueline.schema.json",
+  "heldInMind": 7,
+  "maxDirectoryMembers": 15,
+  "maxFileLines": 1500,
+  "maxFunctionLines": 260,
+  "maxNestingDepth": 5,
+  "maxParameters": 8,
+  "ignoreTypeOnlyImports": false,
+  "layers": {
+    "preset": "none",
+    "rules": [
+      {
+        "name": "model-is-pure",
+        "from": "src/model/**",
+        "deny": ["src/lint/**", "src/allow/**", "src/format/**", "src/workspace/**", "src/analyzer/**", "src/github/**", "src/cli/**"],
+        "reason": "The core domain model must stay pure with zero outward dependencies."
+      },
+      {
+        "name": "lint-depends-only-on-model",
+        "from": "src/lint/**",
+        "deny": ["src/allow/**", "src/format/**", "src/workspace/**", "src/analyzer/**", "src/github/**", "src/cli/**"],
+        "reason": "Lint rules operate purely on the domain Model and Graph."
+      },
+      {
+        "name": "allow-depends-only-on-model",
+        "from": "src/allow/**",
+        "deny": ["src/lint/**", "src/format/**", "src/workspace/**", "src/analyzer/**", "src/github/**", "src/cli/**"],
+        "reason": "Allowlist logic depends only on diagnostic keys and lint types."
+      },
+      {
+        "name": "format-depends-only-on-model",
+        "from": "src/format/**",
+        "deny": ["src/lint/**", "src/allow/**", "src/workspace/**", "src/analyzer/**", "src/github/**", "src/cli/**"],
+        "reason": "Formatters render Model diagnostics without coupling to analysis or CLI."
+      },
+      {
+        "name": "workspace-no-analyzer-or-cli",
+        "from": "src/workspace/**",
+        "deny": ["src/lint/**", "src/allow/**", "src/format/**", "src/analyzer/**", "src/github/**", "src/cli/**"],
+        "reason": "Workspace discovery is an infrastructure leaf beneath the analyzer."
+      },
+      {
+        "name": "analyzer-no-lint-or-cli",
+        "from": "src/analyzer/**",
+        "deny": ["src/lint/**", "src/allow/**", "src/format/**", "src/github/**", "src/cli/**"],
+        "reason": "The TypeScript analyzer produces a Model without knowing which lints consume it."
+      },
+      {
+        "name": "github-no-cli",
+        "from": "src/github/**",
+        "deny": ["src/cli/**"],
+        "reason": "GitHub governance logic stays independent from CLI argument parsing."
+      }
+    ]
+  },
+  "github": {
+    "ratchet": "merge",
+    "branch": "main",
+    "protect": [
+      ".github/workflows/trueline-verify.yml",
+      ".github/workflows/trueline-merge.yml",
+      ".github/workflows/ci.yml",
+      ".github/workflows/release.yml",
+      ".github/CODEOWNERS"
+    ]
+  }
+}
