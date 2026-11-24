@@ -39,7 +39,23 @@ import {
 import { analyzeRustCrates } from '../workspace/rust.ts';
 
 const TOOL_NAME = 'trueline';
-const TOOL_VERSION = '1.0.0';
+const TOOL_VERSION = readPackageVersion();
+
+function readPackageVersion(): string {
+  for (const rel of ['../../package.json', '../package.json']) {
+    try {
+      const pkgUrl = new URL(rel, import.meta.url);
+      if (!existsSync(pkgUrl)) continue;
+      const parsed = JSON.parse(readFileSync(pkgUrl, 'utf8')) as { version?: string };
+      if (typeof parsed.version === 'string' && parsed.version.length > 0) {
+        return parsed.version;
+      }
+    } catch {
+      // Fall back to default version when package.json cannot be read.
+    }
+  }
+  return '1.0.0';
+}
 
 interface CliOptions {
   readonly scope: string | undefined;
