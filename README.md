@@ -42,11 +42,11 @@ Run `trueline --explain <lint>` for the principle and a Before/After TypeScript 
 
 ```bash
 # Run without installing (Node 20+ or Bun)
-npx trueline --format dashboard
-bunx trueline --format dashboard
+npx trueline-lint --format dashboard
+bunx trueline-lint --format dashboard
 
-# Or install globally / link locally
-npm install -g trueline
+# Or install globally / as a devDependency (exposes the `trueline` CLI)
+npm install -g trueline-lint
 ```
 
 ### Everyday Commands
@@ -107,7 +107,7 @@ Run `trueline --init` to create a starter `trueline.json` and print a ready-to-p
 
 ```json
 {
-  "$schema": "./node_modules/trueline/schema/trueline.schema.json",
+  "$schema": "./node_modules/trueline-lint/schema/trueline.schema.json",
   "heldInMind": 7,
   "maxDirectoryMembers": 15,
   "maxFileLines": 1500,
@@ -166,7 +166,7 @@ Add a `github` block to `trueline.json` to lock `--update-allow` locally as well
 
 ```yaml
 - name: Architectural check
-  run: npx trueline --allow .trueline.allow --format markdown --badge badge.json >> "$GITHUB_STEP_SUMMARY"
+  run: npx trueline-lint --allow .trueline.allow --format markdown --badge badge.json >> "$GITHUB_STEP_SUMMARY"
 ```
 
 ### Turborepo (`turbo.json`)

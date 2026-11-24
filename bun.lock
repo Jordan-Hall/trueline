@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "trueline",
+      "name": "trueline-lint",
       "dependencies": {
         "typescript": "^6.0.3",
       },

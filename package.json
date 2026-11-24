@@ -1,5 +1,5 @@
 {
-  "name": "trueline",
+  "name": "trueline-lint",
   "version": "1.0.0",
   "description": "Deterministic architectural and code-hygiene linter for TypeScript and monorepos: deep modules, narrow interfaces, clean architecture, zero slop.",
   "type": "module",
@@ -30,7 +30,8 @@
     "code-quality"
   ],
   "bin": {
-    "trueline": "./dist/cli/bin.js"
+    "trueline": "./dist/cli/bin.js",
+    "trueline-lint": "./dist/cli/bin.js"
   },
   "exports": {
     ".": {
