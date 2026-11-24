@@ -15,16 +15,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://registry.npmjs.org
+      - name: Ensure npm CLI supports OIDC Trusted Publishing (>= 11.5.1)
+        run: npm install -g npm@latest
       - run: bun install --frozen-lockfile
       - run: bun run verify
-      - name: Publish to npm
+      - name: Publish to npm via Trusted Publishing (OIDC)
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
