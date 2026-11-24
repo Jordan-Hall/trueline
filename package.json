@@ -1,6 +1,6 @@
 {
   "name": "trueline-lint",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Deterministic architectural and code-hygiene linter for TypeScript and monorepos: deep modules, narrow interfaces, clean architecture, zero slop.",
   "type": "module",
   "license": "MIT",
