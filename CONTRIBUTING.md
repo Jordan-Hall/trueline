@@ -1,10 +1,10 @@
-# Contributing to trueline
+# Contributing to trueline-lint
 
-Thank you for your interest in contributing to **trueline**!
+Thank you for your interest in contributing to **trueline-lint**!
 
 ## Design Principles
 
-`trueline` dogfoods itself on every commit. Keep changes aligned with its own rules:
+`trueline-lint` dogfoods itself on every commit. Keep changes aligned with its own rules:
 
 1. **Deep modules, narrow interfaces**: Keep internal helpers private and expose small, cohesive entrypoints.
 2. **Strict layer direction** (enforced by `trueline.json`):

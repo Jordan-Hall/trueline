@@ -56,12 +56,13 @@
   },
   "github": {
     "ratchet": "merge",
-    "branch": "main",
+    "branch": "master",
     "protect": [
       ".github/workflows/trueline-verify.yml",
       ".github/workflows/trueline-merge.yml",
       ".github/workflows/ci.yml",
       ".github/workflows/release.yml",
+      ".github/workflows/release-please.yml",
       ".github/CODEOWNERS"
     ]
   }

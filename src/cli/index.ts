@@ -849,7 +849,7 @@ async function runGithubSubcommand(args: readonly string[]): Promise<CliResult> 
   }
 
   if (sub === 'init') {
-    return runGithubInit(cwd, branch ?? 'main');
+    return runGithubInit(cwd, branch ?? 'master');
   }
   if (sub === 'verify') {
     return runGithubVerify(cwd, extraProtect);
@@ -859,7 +859,7 @@ async function runGithubSubcommand(args: readonly string[]): Promise<CliResult> 
     const workspace = discoverWorkspace(cwd, loaded.config);
     const { model } = analyzeWorkspace(workspace, { useCache, config: loaded.config });
     const diagnostics = runLints(model, loaded.config);
-    const targetBranch = branch ?? loaded.config.github?.branch ?? 'main';
+    const targetBranch = branch ?? loaded.config.github?.branch ?? 'master';
     return runGithubMerge(cwd, diagnostics, { allowPath, branch: targetBranch });
   }
   throw new Error(`Unknown github subcommand "${sub}" (expected init, verify, or merge)`);

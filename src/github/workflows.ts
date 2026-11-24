@@ -50,7 +50,7 @@ jobs:
 `;
 }
 
-export function mergeWorkflowTemplate(branch = 'main'): string {
+export function mergeWorkflowTemplate(branch = 'master'): string {
   return `name: trueline merge
 
 # The one place .trueline.allow is tightened after a pull request merges.

@@ -99,7 +99,7 @@
           "enum": ["merge", "manual"],
           "default": "manual"
         },
-        "branch": { "type": "string", "default": "main" },
+        "branch": { "type": "string", "default": "master" },
         "bot": { "type": "string" },
         "protect": {
           "type": "array",

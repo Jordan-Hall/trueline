@@ -1,8 +1,20 @@
-# trueline
+# trueline-lint
+
+[![npm](https://img.shields.io/npm/v/trueline-lint)](https://www.npmjs.com/package/trueline-lint)
+[![CI](https://github.com/Jordan-Hall/trueline/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/Jordan-Hall/trueline/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/Jordan-Hall/trueline)](https://github.com/Jordan-Hall/trueline/blob/master/LICENSE)
 
 **Deterministic architectural and code-hygiene linter for TypeScript and monorepos.**
 
 Built around John Ousterhout's *A Philosophy of Software Design* and Clean Architecture: **deep modules, narrow interfaces, clear boundaries, zero slop**. Runs natively on **Node.js 20+** and **Bun**, across single packages, npm/yarn/bun workspaces, `pnpm-workspace.yaml`, and Turborepo monorepos (with optional Rust workspace support via [`deslop-please`](https://github.com/deterministic-machines/deslop-please)).
+
+## Watch
+
+What is in **trueline-lint v1** — an 81-second animated fable following Plumb across circular dependency cuts, deep modules, Clean Architecture layer enforcement, seven anti-slop hygiene lints, the executive CLI & HTML dashboard, and tamper-proof GitHub allowlist ratcheting:
+
+[![trueline-lint v1: a silent preview that plays here](docs/media/trueline-v1.gif)](docs/media/trueline-v1.mp4)
+
+The preview above plays here without sound. [trueline-v1.mp4](docs/media/trueline-v1.mp4) is the full 1080p film with British English narration, soundtrack, and sound effects.
 
 ---
 
@@ -34,7 +46,7 @@ Built around John Ousterhout's *A Philosophy of Software Design* and Clean Archi
 | `complex-function` | Functions exceeding line count (`120`), control-flow nesting depth (`4`), or positional parameters (`5`) |
 | `duplicate-logic` | Structurally identical copy-pasted functions across files via alpha-normalised AST fingerprinting |
 
-Run `trueline --explain <lint>` for the principle and a Before/After TypeScript example for any rule.
+Run `npx trueline-lint --explain <lint>` for the principle and a Before/After TypeScript example for any rule.
 
 ---
 
@@ -45,55 +57,55 @@ Run `trueline --explain <lint>` for the principle and a Before/After TypeScript 
 npx trueline-lint --format dashboard
 bunx trueline-lint --format dashboard
 
-# Or install globally / as a devDependency (exposes the `trueline` CLI)
-npm install -g trueline-lint
+# Or install globally / as a devDependency
+npm install -D trueline-lint
 ```
 
 ### Everyday Commands
 
 ```bash
 # Executive CLI dashboard (4 KPI cards, lint bars, hotspots, 1-item quick-win cycles)
-trueline --format dashboard
+npx trueline-lint --format dashboard
 
 # CLI dashboard + standalone interactive HTML report + Rust crates
-trueline --format dashboard --html ./trueline-report.html --rust
+npx trueline-lint --format dashboard --html ./trueline-report.html --rust
 
 # Architecture rules only (great alongside ESLint/Oxlint)
-trueline --preset arch
+npx trueline-lint --preset arch
 
 # Strict thresholds (maxFileLines: 800, maxFunctionLines: 80, maxNestingDepth: 3)
-trueline --preset strict
+npx trueline-lint --preset strict
 
 # Scope to one package locally (fast for per-package Turborepo tasks)
-trueline @my-org/payments --local
+npx trueline-lint @my-org/payments --local
 
-# Check only packages affected since origin/main (+ transitive dependents)
-trueline --affected origin/main
+# Check only packages affected since origin/master (+ transitive dependents)
+npx trueline-lint --affected origin/master
 
 # Compare against a previous JSON baseline to see trend deltas
-trueline --format json -o baseline.json
-trueline --format dashboard --compare baseline.json
+npx trueline-lint --format json -o baseline.json
+npx trueline-lint --format dashboard --compare baseline.json
 
 # Explain any rule
-trueline --explain field-leak
+npx trueline-lint --explain field-leak
 ```
 
 ---
 
 ## Ratchet Existing Debt (`--allow` / `--update-allow`)
 
-Adopt `trueline` in CI immediately with zero noise for existing debt:
+Adopt `trueline-lint` in CI immediately with zero noise for existing debt:
 
 ```bash
 # Snapshot current architectural & hygiene debt
-trueline --update-allow .trueline.allow
+npx trueline-lint --update-allow .trueline.allow
 
 # Enforce in CI: existing debt stays quiet, any new violation fails
-trueline --allow .trueline.allow
+npx trueline-lint --allow .trueline.allow
 
 # Or keep per-package `.trueline.allow` files for Turborepo
-trueline --per-package --update-allow .trueline.allow
-trueline --per-package
+npx trueline-lint --per-package --update-allow .trueline.allow
+npx trueline-lint --per-package
 ```
 
 - **Shrinking an allowed `module-cycle`, `package-cycle`, or `tangle` stays allowed** — incremental progress never breaks CI.
@@ -103,7 +115,7 @@ trueline --per-package
 
 ## Configuration (`trueline.json`)
 
-Run `trueline --init` to create a starter `trueline.json` and print a ready-to-paste `AGENTS.md` snippet.
+Run `npx trueline-lint --init` to create a starter `trueline.json` and print a ready-to-paste `AGENTS.md` snippet.
 
 ```json
 {
@@ -134,17 +146,17 @@ Run `trueline --init` to create a starter `trueline.json` and print a ready-to-p
 
 ## CI, Governance & Turborepo Recipes
 
-### Tamper-Proof GitHub Governance (`trueline github init`)
+### Tamper-Proof GitHub Governance (`trueline-lint github init`)
 
 Prevent pull requests from silently expanding `.trueline.allow` or weakening `trueline.json`, and tighten debt automatically on merge:
 
 ```bash
-trueline github init --branch main
+npx trueline-lint github init --branch master
 ```
 
 This scaffolds two workflows:
-1. **`.github/workflows/trueline-verify.yml`** (`on: pull_request_target`): installs the pinned `trueline` binary outside the workspace without executing any PR code and runs `trueline github verify`. It fails any PR that modifies `.trueline.allow`, alters protected workflow/CODEOWNERS files, changes the `github` block, disables lints, raises thresholds, adds `ignore` patterns, or removes/alters layer rules.
-2. **`.github/workflows/trueline-merge.yml`** (`on: push` to `main`, ignoring `**/.trueline.allow`): runs `trueline github merge`. When debt is resolved or a cycle/tangle shrinks, it tightens `.trueline.allow` through the GitHub Contents API (supporting an optional GitHub App via `vars.TRUELINE_APP_ID` + `secrets.TRUELINE_APP_KEY` for ruleset-protected branches) and comments on the merged PR.
+1. **`.github/workflows/trueline-verify.yml`** (`on: pull_request_target`): installs the pinned `trueline-lint` binary outside the workspace without executing any PR code and runs `trueline-lint github verify`. It fails any PR that modifies `.trueline.allow`, alters protected workflow/CODEOWNERS files, changes the `github` block, disables lints, raises thresholds, adds `ignore` patterns, or removes/alters layer rules.
+2. **`.github/workflows/trueline-merge.yml`** (`on: push` to `master`, ignoring `**/.trueline.allow`): runs `trueline-lint github merge`. When debt is resolved or a cycle/tangle shrinks, it tightens `.trueline.allow` through the GitHub Contents API (supporting an optional GitHub App via `vars.TRUELINE_APP_ID` + `secrets.TRUELINE_APP_KEY` for ruleset-protected branches) and comments on the merged PR.
 
 Add a `github` block to `trueline.json` to lock `--update-allow` locally as well:
 
@@ -152,7 +164,7 @@ Add a `github` block to `trueline.json` to lock `--update-allow` locally as well
 {
   "github": {
     "ratchet": "merge",
-    "branch": "main",
+    "branch": "master",
     "protect": [
       ".github/workflows/trueline-verify.yml",
       ".github/workflows/trueline-merge.yml",

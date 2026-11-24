@@ -29,7 +29,7 @@ interface PullRequestEvent {
   };
 }
 
-export function runGithubInit(cwd: string, branch = 'main'): GithubCommandResult {
+export function runGithubInit(cwd: string, branch = 'master'): GithubCommandResult {
   const wfDir = join(cwd, '.github', 'workflows');
   mkdirSync(wfDir, { recursive: true });
   const verifyPath = join(wfDir, 'trueline-verify.yml');

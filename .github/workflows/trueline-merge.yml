@@ -11,7 +11,7 @@ name: trueline merge
 
 on:
   push:
-    branches: [main, master]
+    branches: [master]
     paths-ignore: ['**/.trueline.allow']
 
 concurrency:

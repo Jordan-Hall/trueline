@@ -353,7 +353,7 @@ function parseGithubConfig(
   const branch =
     typeof obj.branch === 'string' && obj.branch.trim().length > 0
       ? obj.branch.trim()
-      : 'main';
+      : 'master';
   const bot =
     typeof obj.bot === 'string' && obj.bot.trim().length > 0
       ? obj.bot.trim()

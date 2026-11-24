@@ -3,3 +3,5 @@ dist/
 .trueline-cache/
 .turbo/
 *.log
+scripts/film/film.html
+scripts/film/.work/
