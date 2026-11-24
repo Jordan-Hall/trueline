@@ -2,6 +2,13 @@
 
 All notable changes to `trueline` will be documented in this file.
 
+## [1.1.0](https://github.com/Jordan-Hall/trueline/compare/trueline-lint-v1.0.1...trueline-lint-v1.1.0) (2026-11-24)
+
+
+### Features
+
+* default to master branch, add release-please workflow, and add v1 launch film ([ba9cb6e](https://github.com/Jordan-Hall/trueline/commit/ba9cb6e3d63eba645aa88a0b4e777cc5299d385d))
+
 ## [1.0.0] - 2026-11-24
 
 ### Added
